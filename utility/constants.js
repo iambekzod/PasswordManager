@@ -1,1 +1,5 @@
-module.exports.sessionSecret = "one password for all sessions";
+const sessionSecret = "one password for all sessions";
+
+module.exports = {
+    sessionSecret
+}

@@ -7,8 +7,7 @@ const bodyParser = require('body-parser');
 const cookie = require('cookie');
 const session = require('express-session');
 const constants = require ('./utility/constants');
-const utility = require('./utility/utility');
-const db = require('./utility/database');
+
 ///////////////////////////////////////////////////////
 // Initialization
 ///////////////////////////////////////////////////////
