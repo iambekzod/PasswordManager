@@ -5,6 +5,9 @@
 /client/tmp
 /client/out-tsc
 
+#db files
+/db/
+
 # dependencies
 /node_modules
 /client/node_modules

@@ -3,13 +3,13 @@ const path = require('path');
 const fs = require('fs');
 
 var users = new Datastore({
-    filename: path.join(__dirname, 'db', 'users.db'),
+    filename: path.join(__dirname, '../db', 'users.db'),
     autoload: true,
     timestampData: true
 });
 
 var passwords = new Datastore({
-    filename: path.join(__dirname, 'db', 'passwords.db'),
+    filename: path.join(__dirname, '../db', 'passwords.db'),
     autoload: true,
     timestampData: true
 });
@@ -28,7 +28,6 @@ var Password = (function () {
 }());
 
 var User = (function () {
-    var id = 0;
     return function comment(data) {
         this._id = data._id;
         this.hash = data.hash;
