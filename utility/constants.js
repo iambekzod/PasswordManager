@@ -1,0 +1,1 @@
+module.exports.sessionSecret = "one password for all sessions";
