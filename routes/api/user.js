@@ -1,10 +1,20 @@
 const router = require('express').Router();
 const cookie = require('cookie');
+const validator = require('validator');
 const db = require('../../utility/database.js');
 const utility = require('../../utility/utility.js');
 
+var checkUserPass = function (req, res, next) {
+    if (!('username' in req.body)) return res.status(400).end('username is missing');
+    if (!('password' in req.body)) return res.status(400).end('password is missing');
+
+    if (!validator.isAlphanumeric(req.body.username)) return res.status(400).end("bad username input, must be alphanumeric");
+    if (!validator.isAlphanumeric(req.body.password)) return res.status(400).end("bad password input, must be alphanumeric");
+    next();
+};
+
 //curl -X POST http://localhost:3000/api/user/signup -H "Content-Type: application/json" -d '{"username":"bekzod", "password":"123"}'
-router.post('/signup/', utility.checkUserPass, function (req, res) {
+router.post('/signup/', checkUserPass, function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
 
@@ -35,7 +45,7 @@ router.post('/signup/', utility.checkUserPass, function (req, res) {
 });
 
 //curl -X POST http://localhost:3000/api/user/signin -H "Content-Type: application/json" -c cookie.txt -d '{"username":"bekzod", "password":"123"}'
-router.post('/signin/', utility.checkUserPass, function (req, res) {
+router.post('/signin/', checkUserPass, function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
 
