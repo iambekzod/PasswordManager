@@ -4,10 +4,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AddPasswordComponent } from './add-password/add-password.component';
 import { EditPasswordComponent } from './edit-password/edit-password.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'add', component: AddPasswordComponent },
   { path: 'edit/:id', component: EditPasswordComponent }
 ];

@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { AddPasswordComponent } from './add-password/add-password.component';
 import { PasswordTableComponent } from './password-table/password-table.component';
 import { EditPasswordComponent } from './edit-password/edit-password.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { EditPasswordComponent } from './edit-password/edit-password.component';
     HomeComponent,
     AddPasswordComponent,
     PasswordTableComponent,
-    EditPasswordComponent
+    EditPasswordComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
