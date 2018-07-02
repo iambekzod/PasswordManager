@@ -26,7 +26,7 @@ if (app.get('env') == 'production') {
 } else {
     app.use(morgan('dev'));
 }
-//app.use(express.static('client'))
+app.use(express.static('client/dist/PasswordManager'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session({
