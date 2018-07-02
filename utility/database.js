@@ -1,5 +1,7 @@
 const Datastore = require('nedb');
 const path = require('path');
+const crypto = require('./crypto.js');
+const constants = require('./constants.js');
 
 var users = new Datastore({
     filename: path.join(__dirname, '../db', 'users.db'),
@@ -14,15 +16,18 @@ var passwords = new Datastore({
 });
 
 var Password = (function () {
-    return function image(data) {
+    return function password(data) {
+        let decrypted = JSON.parse(crypto.decrypt(data.data, constants.masterKey));
+
         this._id = data._id;
-        this.owner = data.owner;
-        this.website = data.website;
-        this.username = data.username;
-        this.password = data.password;
-        this.notes = data.notes;
         this.createdAt = data.createdAt;
         this.updatedAt = data.updatedAt;
+
+        this.author = decrypted.author;
+        this.website = decrypted.website;
+        this.username = decrypted.username;
+        this.password = decrypted.password;
+        this.notes = decrypted.notes;
     };
 }());
 
@@ -31,7 +36,7 @@ var User = (function () {
         this._id = data._id;
         this.hash = data.hash;
         this.salt = data.salt;
-        this.createdAt = savedComment.createdAt;
+        this.createdAt = data.createdAt;
     };
 }());
 

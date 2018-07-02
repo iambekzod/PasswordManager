@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const db = require('../../utility/database.js');
 const utility = require('../../utility/utility.js');
+const validator = require('validator');
+const crypto = require('../../utility/crypto.js');
+const constants = require('../../utility/constants.js');
 
 var sanitizeInput = function (req, res, next) {
     if (!('website' in req.body)) return res.status(400).end('website is missing');
@@ -26,8 +29,9 @@ router.get('/', utility.isAuthenticated, function (req, res) {
     });
 });
 
-router.post('/add', utility.isAuthenticated, sanitizeInput, function (req, res) {
-    var requestPassword = {
+//curl -X POST http://localhost:3000/api/passwords/ -b cookie.txt -H "Content-Type: application/json" -d '{"website":"111", "username":"bekzod", "password":"123", "notes":""}'
+router.post('/', utility.isAuthenticated, sanitizeInput, function (req, res) {
+    var data = {
         author: req.user._id,
         website: req.body.website,
         username: req.body.username,
@@ -35,12 +39,13 @@ router.post('/add', utility.isAuthenticated, sanitizeInput, function (req, res) 
         notes: req.body.notes
     };
 
-    res.json(requestPassword);
-    // db.passwords.insert(requestPassword, function (err, data) {
-    //     if (err) return res.status(500).end(err);
+    var requestPassword = { data: crypto.encrypt(JSON.stringify(data), constants.masterKey) };
 
-    //     return res.json(new db.Password(data));
-    // });
+    db.passwords.insert(requestPassword, function (err, data) {
+        if (err) return res.status(500).end(err);
+        
+        return res.json(new db.Password(data));
+    });
 });
 
 module.exports = router;
