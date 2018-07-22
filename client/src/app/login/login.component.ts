@@ -8,22 +8,22 @@ import { AuthService } from './../auth/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  form: FormGroup;                    // {1}
-  private formSubmitAttempt: boolean; // {2}
+  form: FormGroup;
+  private formSubmitAttempt: boolean;
 
   constructor(
-    private fb: FormBuilder,         // {3}
-    private authService: AuthService // {4}
+    private fb: FormBuilder,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.form = this.fb.group({     // {5}
-      userName: ['', Validators.required],
-      password: ['', Validators.required]
-    });
+      this.form = this.fb.group({
+        userName: ['', Validators.required],
+        password: ['', Validators.required]
+      });
   }
 
-  isFieldInvalid(field: string) { // {6}
+  isFieldInvalid(field: string) {
     return (
       (!this.form.get(field).valid && this.form.get(field).touched) ||
       (this.form.get(field).untouched && this.formSubmitAttempt)
@@ -32,8 +32,8 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.authService.login(this.form.value); // {7}
+      this.authService.login(this.form.value);
     }
-    this.formSubmitAttempt = true;             // {8}
+    this.formSubmitAttempt = true;
   }
 }
