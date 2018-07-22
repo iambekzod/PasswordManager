@@ -1,0 +1,7 @@
+.move {
+    padding-right: 5px;
+}
+
+.fill-remaining-space {
+    flex: 1 1 auto;
+}
