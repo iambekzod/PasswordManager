@@ -38,7 +38,7 @@ export class PasswordTableComponent {
   editItem(item: PeriodicElement) {
     this.router.navigate(['/edit', item.id])
   }
-  deleteItem(item: Item) {
+  deleteItem(item: PeriodicElement) {
     //  this.store.dispatch(new itemsActions.Delete(item.id));
    }
 

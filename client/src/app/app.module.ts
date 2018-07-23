@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule, MatFormFieldModule, MatTableModule } from '@angular/material';
@@ -35,6 +36,7 @@ import { AuthService } from './auth/auth.service';
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     MatTableModule,
     MatCardModule,
     MatFormFieldModule,
