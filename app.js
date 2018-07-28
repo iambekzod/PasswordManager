@@ -18,6 +18,7 @@ const app = express();
 // Middleware
 ///////////////////////////////////////////////////////
 if (app.get('env') == 'production') {
+    console.log("Launched with production settings");
     app.use(morgan('combined', {
         skip: function (req, res) {
             return res.statusCode < 400;
@@ -25,6 +26,12 @@ if (app.get('env') == 'production') {
     }));
 } else {
     app.use(morgan('dev'));
+
+    app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
 }
 app.use(express.static('client/dist/PasswordManager'))
 app.use(bodyParser.urlencoded({ extended: false }));

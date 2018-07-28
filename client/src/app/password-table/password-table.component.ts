@@ -1,25 +1,8 @@
 import {Component} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
-
-export interface PeriodicElement {
-  id: string;
-  website: string;
-  username: string;
-  password: string;
-  notes: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {id: '1231asd', website: 'paypal', username: 'aaa', password: 'bbb', notes: 'ccc'},
-  {id: '1231asd', website: 'google', username: 'ddd', password: 'eee', notes: 'fff'},
-  {id: '1231asd', website: 'dailymail', username: 'ggg', password: 'hhh', notes: 'iii'},
-  {id: '1231asd', website: 'index', username: 'jjj', password: 'kkk', notes: 'lll'},
-  {id: '1231asd', website: 'reddit', username: 'mmm', password: 'nnn', notes: 'ooo'},
-  {id: '1231asd', website: 'ebay', username: 'ppp', password: 'qqq', notes: 'rrr'},
-  {id: '1231asd', website: 'amazon', username: 'sss', password: 'ttt', notes: 'uuu'},
-  {id: '1231asd', website: 'uoft', username: 'vvv', password: 'www', notes: 'xxx'}
-];
+import { Password } from '../api/_password';
+import { PasswordDataService } from '../api/password-data.service';
 
 /**
  * @title Table with filtering
@@ -31,18 +14,45 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class PasswordTableComponent {
   displayedColumns: string[] = ['website', 'username', 'password', 'notes', 'actions'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  dataSource: MatTableDataSource<Password>;
 
-  constructor(private router: Router) { }
+  ngOnInit() {
+    this.passwords();
+  }
 
-  editItem(item: PeriodicElement) {
+  constructor(
+    private router: Router,
+    private passwordDataService: PasswordDataService
+  ) {
+  }
+
+  // onAddPassword(password) {
+  //   this.passwordDataService.addPassword(password);
+  // }
+
+  // onRemovePassword(password) {
+  //   this.passwordDataService.deletePasswordById(password.id);
+  // }
+
+  passwords() {
+    return this.passwordDataService.getAllPasswords();
+  }
+
+  // filterPasswords(filter) {
+  //   return this.passwordDataService.getAllFilterPasswords(filter);
+  // }
+
+  editPassword(item: Password) {
     this.router.navigate(['/edit', item.id])
   }
-  deleteItem(item: PeriodicElement) {
-    //  this.store.dispatch(new itemsActions.Delete(item.id));
-   }
 
   applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.passwords()
+    // this.filterPasswords(filterValue).toPromise().then(function (data) {
+    //   console.log(data);
+    // });
+    // let dataSource = new MatTableDataSource();
+
+    // dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

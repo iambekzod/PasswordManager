@@ -20,6 +20,8 @@ import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
+import { ApiService } from './api/api.service';
+import { PasswordDataService } from './api/password-data.service';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,7 @@ import { AuthService } from './auth/auth.service';
     MatButtonModule,
     MatIconModule
   ],
-  providers: [AuthGuard, AuthService],
+  providers: [AuthGuard, AuthService, ApiService, PasswordDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

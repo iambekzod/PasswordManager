@@ -4,7 +4,8 @@
   "description": "Password manager made in angular and node/express",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production node ./app.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "express-session": "^1.15.6",
     "morgan": "^1.9.0",
     "nedb": "^1.8.0",
+    "nodemon": "^1.18.3",
     "validator": "^10.4.0"
   }
 }
