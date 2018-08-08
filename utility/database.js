@@ -17,7 +17,7 @@ var passwords = new Datastore({
 
 var Password = (function () {
     return function password(data) {
-        let decrypted = JSON.parse(crypto.decrypt(data.data, constants.masterKey));
+        let decrypted = JSON.parse(crypto.decrypt(data.data, constants.MASTER_KEY));
 
         this._id = data._id;
         this.createdAt = data.createdAt;

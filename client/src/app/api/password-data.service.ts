@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Password } from './_password';
 import { ApiService } from './api.service';
 import { throwError } from 'rxjs';
-import { map } from '../../../node_modules/rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class PasswordDataService {
@@ -10,11 +10,6 @@ export class PasswordDataService {
   constructor(
     private api: ApiService
   ) {
-  }
-
-  private handleError (error: Response | any) {
-    console.error('ApiService::handleError', error);
-    return throwError(error);
   }
 
   // // Simulate POST /Passwords
@@ -34,15 +29,15 @@ export class PasswordDataService {
 
   // Simulate GET /Passwords
   getAllPasswords() {
-    return this.api.getAllPasswords().subscribe(
-      data => {
-        console.log(data);
-        return data;
-      },
-      error => {
-        this.handleError(error);
-      }
-    )
+    // return this.api.getAllPasswords().subscribe(
+    //   data => {
+    //     console.log(data);
+    //     return data;
+    //   },
+    //   error => {
+    //     this.handleError(error);
+    //   }
+    // )
   }
 
   // // Simulate GET /Passwords/filter/:word

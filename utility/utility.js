@@ -1,8 +1,20 @@
 const crypto = require('crypto');
+const constants = require('./constants.js');
+const jwt = require('jsonwebtoken');
 
 var isAuthenticated = function (req, res, next) {
-    if (!req.user) return res.status(401).end("access denied");
-    next();
+    return new Promise((resolve, reject) =>
+    {
+      jwt.verify(token, constants.JWT_SECRET, (err, decodedToken) => 
+      {
+        if (err || !decodedToken)
+        {
+          return reject(err);
+        }
+  
+        resolve(decodedToken)
+      });
+    });
 };
 
 function generateSalt() {
@@ -15,8 +27,22 @@ function generateHash(password, salt) {
     return hash.digest('base64');
 }
 
+function createJWTToken(details) {
+    details = details || {};
+
+    var token = jwt.sign({
+        data: details
+       }, constants.JWT_SECRET, {
+         expiresIn: details.maxAge,
+         algorithm: 'HS256'
+     });
+   
+     return token;
+}
+
 module.exports = {
     isAuthenticated,
     generateHash,
-    generateSalt
+    generateSalt,
+    createJWTToken
 }

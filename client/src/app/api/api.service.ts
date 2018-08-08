@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { throwError } from 'rxjs';
 
 import { Password } from './_password';
+import { User } from '../auth/user';
 
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { SessionService } from '../auth/session.service';
 
 const API_URL = environment.API_URL;
 console.log(API_URL);
@@ -13,14 +14,28 @@ console.log(API_URL);
 @Injectable()
 export class ApiService {
 
+  private options;
+
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private sessionService: SessionService
   ) {
+    this.options = this.getRequestOptions();
+  }
+
+  private getRequestOptions() {
+    return new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('authorization', 'Bearer ' + this.sessionService.accessToken);
+  }
+
+  public login(user: User) {
+    return this.http.post(API_URL + '/user/signin', user, this.options);
   }
 
    // API: GET /Passwords
   public getAllPasswords() {
-    return this.http.get(API_URL + '/passwords');
+    return this.http.get(API_URL + '/passwords/', this.options);
   }
 
   //   // API: GET /Passwords/filter/:id

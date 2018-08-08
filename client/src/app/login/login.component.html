@@ -17,6 +17,10 @@
         </mat-form-field>
         <button mat-raised-button color="primary">Login</button>
       </form>
+
+      <div class="center" *ngIf="loading">
+        <mat-spinner class="login-spinner"></mat-spinner>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

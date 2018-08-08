@@ -34,9 +34,9 @@ export class AddPasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.valid) {
-      this.authService.login(this.form.value);
-    }
-    this.formSubmitAttempt = true;
+    // if (this.form.valid) {
+    //   this.authService.doSignIn(this.form.value);
+    // }
+    // this.formSubmitAttempt = true;
   }
 }

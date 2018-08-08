@@ -5,8 +5,6 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookie = require('cookie');
-const session = require('express-session');
-const constants = require ('./utility/constants');
 
 ///////////////////////////////////////////////////////
 // Initialization
@@ -36,26 +34,6 @@ if (app.get('env') == 'production') {
 app.use(express.static('client/dist/PasswordManager'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(session({
-    secret: constants.sessionSecret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        httpOnly: true,
-        sameSite: true
-    }
-}));
-
-app.use(function (req, res, next) {
-    req.user = ('user' in req.session) ? req.session.user : null;
-    var username = (req.user) ? req.user._id : '';
-    res.setHeader('Set-Cookie', cookie.serialize('username', username, {
-        path: '/',
-        maxAge: 60 * 60 * 24 * 7 // 1 week in number of seconds
-    }));
-
-    next();
-});
 
 app.use(require('./routes'));
 

@@ -1,14 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule, MatFormFieldModule, MatTableModule } from '@angular/material';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,6 +24,12 @@ import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
 import { ApiService } from './api/api.service';
 import { PasswordDataService } from './api/password-data.service';
+import { AlertService } from './alert/alert.service';
+import { AlertComponent } from './alert/alert.component';
+import { ErrorInterceptor } from './auth/errorInterceptor';
+import { HomeComponent } from './home/home.component';
+import { SessionService } from './auth/session.service';
+
 
 @NgModule({
   declarations: [
@@ -31,7 +39,9 @@ import { PasswordDataService } from './api/password-data.service';
     EditPasswordComponent,
     DashboardComponent,
     LoginComponent,
-    HeaderComponent
+    HeaderComponent,
+    AlertComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -40,14 +50,17 @@ import { PasswordDataService } from './api/password-data.service';
     ReactiveFormsModule,
     HttpClientModule,
     MatTableModule,
+    MatProgressSpinnerModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    NgbModule.forRoot()
   ],
-  providers: [AuthGuard, AuthService, ApiService, PasswordDataService],
+  providers: [SessionService, AuthGuard, AuthService, ApiService, PasswordDataService, AlertService,
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

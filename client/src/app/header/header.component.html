@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" *ngIf="isLoggedIn$ | async as isLoggedIn">
+<mat-toolbar color="primary">
   <span class="clickable" routerLink="">
     <mat-icon class="move">inbox</mat-icon>
     Password Manager
@@ -6,9 +6,19 @@
 
   <span class="fill-remaining-space"></span>
 
-  <button mat-button routerLink="add">
+  <button mat-button routerLink="dashboard" *ngIf="isLoggedIn">
+    <mat-icon class="move">description</mat-icon>
+    Dashboard
+  </button>
+
+  <button mat-button routerLink="add" *ngIf="isLoggedIn">
     <mat-icon class="move">note_add</mat-icon>
     Add a password
+  </button>
+
+  <button mat-button routerLink="login" *ngIf="!isLoggedIn">
+    <mat-icon class="move">exit_to_app</mat-icon>
+    Login
   </button>
 
   <button mat-button (click)="onLogout()" *ngIf="isLoggedIn">
