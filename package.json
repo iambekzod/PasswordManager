@@ -18,7 +18,7 @@
     "morgan": "^1.9.0",
     "nedb": "^1.8.0",
     "nodemon": "^1.18.3",
-    "validator": "^10.4.0"
+    "z-schema": "^3.23.0"
   },
   "devDependencies": {
     "eslint": "^5.4.0",

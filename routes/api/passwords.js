@@ -1,5 +1,4 @@
 const express = require('express');
-const validator = require('validator');
 
 const db = require('../../helpers/database.js');
 const utility = require('../../helpers/utility.js');

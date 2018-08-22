@@ -1,29 +1,19 @@
 const express = require('express');
-const validator = require('validator');
+
 const db = require('../../helpers/database.js');
 const utility = require('../../helpers/utility.js');
+const validator = require('../../helpers/validator.js');
+const userSchema = require('../../helpers/validators/user.json');
 
 const router = new express.Router();
 
-let checkUserPass = function(req, res, next) {
-    if (!('userName' in req.body)) {
-        return res.status(400).json({'error': 'Username is missing'});
-    }
-    if (!('password' in req.body)) {
-        return res.status(400).json({'error': 'Password is missing'});
-    }
-
-    if (!validator.isAlphanumeric(req.body.userName)) {
-        return res.status(400).json({'error': 'Username is invalid'});
-    }
-    if (!validator.isAlphanumeric(req.body.password)) {
-        return res.status(400).json({'error': 'Password is invalid'});
-    }
-    next();
-};
-
 // curl -X POST http://localhost:3000/api/user/signup -H "Content-Type: application/json" -d '{"userName":"bekzod", "password":"123"}'
-router.post('/signup/', checkUserPass, function(req, res) {
+router.post('/signup/', function(req, res) {
+    let errors = validator.assertValid(userSchema, req.body);
+    if (errors.length > 0) {
+        return res.status(400).json({'error': errors});
+    }
+
     let userName = req.body.userName;
     let password = req.body.password;
 
@@ -60,7 +50,12 @@ router.post('/signup/', checkUserPass, function(req, res) {
 });
 
 // curl -X POST http://localhost:3000/api/user/signin -H "Content-Type: application/json" -c cookie.txt -d '{"userName":"bekzod", "password":"123"}'
-router.post('/signin/', checkUserPass, function(req, res) {
+router.post('/signin/', function(req, res) {
+    let errors = validator.assertValid(userSchema, req.body);
+    if (errors.length > 0) {
+        return res.status(500).json({'error': errors});
+    }
+
     let userName = req.body.userName;
     let password = req.body.password;
 
