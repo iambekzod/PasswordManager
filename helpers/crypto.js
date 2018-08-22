@@ -1,6 +1,6 @@
 // AES Encryption/Decryption with AES-256-GCM using random Initialization Vector + Salt
 // ----------------------------------------------------------------------------------------
-// the encrypted datablock is base64 encoded for easy data exchange. 
+// the encrypted datablock is base64 encoded for easy data exchange.
 // if you have the option to store data binary save consider to remove the encoding to reduce storage size
 // ----------------------------------------------------------------------------------------
 // format of encrypted data - used by this example. not an official format
@@ -14,7 +14,7 @@
 // ----------------------------------------------------------------------------------------
 // Input/Output Vars
 //
-// MASTERKEY: the key used for encryption/decryption. 
+// MASTERKEY: the key used for encryption/decryption.
 //            it has to be cryptographic safe - this means randomBytes or derived by pbkdf2 (for example)
 // TEXT:      data (utf8 string) which should be encoded. modify the code to use Buffer for binary data!
 // ENCDATA:   encrypted data as base64 string (format mentioned on top)
@@ -27,11 +27,11 @@ module.exports = {
 
     /**
      * Encrypts text by given key
-     * @param String text to encrypt
-     * @param Buffer masterkey
-     * @returns String encrypted text, base64 encoded
+     * @param {string} text to encrypt
+     * @param {Buffer} masterkey
+     * @return {string} encrypted text, base64 encoded
      */
-    encrypt: function (text, masterkey){
+    encrypt: function(text, masterkey) {
         // random initialization vector
         const iv = _crypto.randomBytes(16);
 
@@ -57,11 +57,11 @@ module.exports = {
 
     /**
      * Decrypts text by given key
-     * @param String base64 encoded input data
-     * @param Buffer masterkey
-     * @returns String decrypted (original) text
+     * @param {string} encdata base64 encoded input data
+     * @param {Buffer} masterkey
+     * @return {string} decrypted (original) text
      */
-    decrypt: function (encdata, masterkey){
+    decrypt: function(encdata, masterkey) {
         // base64 decoding
         const bData = Buffer.from(encdata, 'base64');
 
@@ -72,7 +72,7 @@ module.exports = {
         const text = bData.slice(96);
 
         // derive key using; 32 byte key length
-        const key = _crypto.pbkdf2Sync(masterkey, salt , 2145, 32, 'sha512');
+        const key = _crypto.pbkdf2Sync(masterkey, salt, 2145, 32, 'sha512');
 
         // AES 256 GCM Mode
         const decipher = _crypto.createDecipheriv('aes-256-gcm', key, iv);
@@ -82,5 +82,5 @@ module.exports = {
         const decrypted = decipher.update(text, 'binary', 'utf8') + decipher.final('utf8');
 
         return decrypted;
-    }
+    },
 };

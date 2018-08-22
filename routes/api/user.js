@@ -1,65 +1,86 @@
-const router = require('express').Router();
-const cookie = require('cookie');
+const express = require('express');
 const validator = require('validator');
-const db = require('../../utility/database.js');
-const utility = require('../../utility/utility.js');
+const db = require('../../helpers/database.js');
+const utility = require('../../helpers/utility.js');
 
-var checkUserPass = function (req, res, next) {
-    if (!('userName' in req.body)) return res.status(400).json({ "status": 400, "error": "Username is missing" });
-    if (!('password' in req.body)) return res.status(400).json({ "status": 400, "error": "Password is missing" });
+const router = new express.Router();
 
-    if (!validator.isAlphanumeric(req.body.userName)) return res.status(400).json({ "status": 400, "error": "Username is invalid" });
-    if (!validator.isAlphanumeric(req.body.password)) return res.status(400).json({ "status": 400, "error": "Password is invalid" });
+let checkUserPass = function(req, res, next) {
+    if (!('userName' in req.body)) {
+        return res.status(400).json({'error': 'Username is missing'});
+    }
+    if (!('password' in req.body)) {
+        return res.status(400).json({'error': 'Password is missing'});
+    }
+
+    if (!validator.isAlphanumeric(req.body.userName)) {
+        return res.status(400).json({'error': 'Username is invalid'});
+    }
+    if (!validator.isAlphanumeric(req.body.password)) {
+        return res.status(400).json({'error': 'Password is invalid'});
+    }
     next();
 };
 
-//curl -X POST http://localhost:3000/api/user/signup -H "Content-Type: application/json" -d '{"userName":"bekzod", "password":"123"}'
-router.post('/signup/', checkUserPass, function (req, res) {
-    var userName = req.body.userName;
-    var password = req.body.password;
+// curl -X POST http://localhost:3000/api/user/signup -H "Content-Type: application/json" -d '{"userName":"bekzod", "password":"123"}'
+router.post('/signup/', checkUserPass, function(req, res) {
+    let userName = req.body.userName;
+    let password = req.body.password;
 
     // check if user already exists in the database
     db.users.findOne({
-        _id: userName
-    }, function (err, user) {
-        if (err) return res.status(500).json({ "status": 500, "error": err });
-        if (user) return res.status(409).json({ "status": 409, "error": "Username is taken" });
+        _id: userName,
+    }, function(err, user) {
+        if (err) {
+            return res.status(500).json({'error': err});
+        }
+        if (user) {
+            return res.status(409).json({'error': 'Username is taken'});
+        }
+
         // generate a new salt and hash
-        var salt = utility.generateSalt();
-        var hash = utility.generateHash(password, salt);
+        let salt = utility.generateSalt();
+        let hash = utility.generateHash(password, salt);
+
         // insert new user into the database
         db.users.update({
-            _id: userName
+            _id: userName,
         }, {
             _id: userName,
             hash: hash,
-            salt: salt
+            salt: salt,
         }, {
-            upsert: true
-        }, function (err) {
-            if (err) return res.status(500).json({ "status": 500, "error": err });
+            upsert: true,
+        }, function(err) {
+            if (err) return res.status(500).json({'error': err});
 
-            return res.json({ "status": 200 });
+            return res.json({'status': 'ok'});
         });
     });
 });
 
-//curl -X POST http://localhost:3000/api/user/signin -H "Content-Type: application/json" -c cookie.txt -d '{"userName":"bekzod", "password":"123"}'
-router.post('/signin/', checkUserPass, function (req, res) {
-    var userName = req.body.userName;
-    var password = req.body.password;
+// curl -X POST http://localhost:3000/api/user/signin -H "Content-Type: application/json" -c cookie.txt -d '{"userName":"bekzod", "password":"123"}'
+router.post('/signin/', checkUserPass, function(req, res) {
+    let userName = req.body.userName;
+    let password = req.body.password;
 
     // retrieve user from the database
     db.users.findOne({
-        _id: userName
-    }, function (err, user) {
-        if (err) return res.status(500).json({ "status": 500, "error": err });
-        if (!user) return res.status(403).json({ "status": 403, "error": "Invalid username or password" });
-        if (user.hash !== utility.generateHash(password, user.salt)) return res.status(403).json({ "status": 403, "error": "Invalid username or password" });
+        _id: userName,
+    }, function(err, user) {
+        if (err) {
+            return res.status(500).json({'error': err});
+        }
+        if (!user) {
+            return res.status(403).json({'error': 'Invalid username or password'});
+        }
+        if (user.hash !== utility.generateHash(password, user.salt)) {
+            return res.status(403).json({'error': 'Invalid username or password'});
+        }
 
-        var token = utility.createJWTToken({ "user": user, "maxAge": "7 days" });
+        let token = utility.createJWTToken({'user': user});
 
-        return res.json({ "status": 200, "name": user._id, "token": token });
+        return res.json({'name': user._id, 'token': token});
     });
 });
 

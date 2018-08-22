@@ -1,4 +1,5 @@
-var router = require('express').Router();
+const express = require('express');
+let router = new express.Router();
 
 router.use('/api', require('./api'));
 

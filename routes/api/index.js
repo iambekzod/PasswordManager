@@ -1,4 +1,6 @@
-var router = require('express').Router();
+const express = require('express');
+
+let router = new express.Router();
 
 router.use('/user/', require('./user'));
 router.use('/passwords/', require('./passwords'));
