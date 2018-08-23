@@ -1,25 +1,24 @@
 const express = require('express');
+const router = new express.Router();
 
 const db = require('../../helpers/database.js');
 const utility = require('../../helpers/utility.js');
 const validator = require('../../helpers/validator.js');
-const userSchema = require('../../helpers/validators/user.json');
+const userSchema = require('../../helpers/schemas/userSchema.json');
 
-const router = new express.Router();
-
-// curl -X POST http://localhost:3000/api/user/signup -H "Content-Type: application/json" -d '{"userName":"bekzod", "password":"123"}'
+// curl -X POST http://localhost:3000/api/user/signup -H "Content-Type: application/json" -d '{"username":"bekzod", "password":"123"}'
 router.post('/signup/', function(req, res) {
     let errors = validator.assertValid(userSchema, req.body);
     if (errors.length > 0) {
         return res.status(400).json({'error': errors});
     }
 
-    let userName = req.body.userName;
+    let username = req.body.username;
     let password = req.body.password;
 
     // check if user already exists in the database
     db.users.findOne({
-        _id: userName,
+        username: username,
     }, function(err, user) {
         if (err) {
             return res.status(500).json({'error': err});
@@ -34,9 +33,9 @@ router.post('/signup/', function(req, res) {
 
         // insert new user into the database
         db.users.update({
-            _id: userName,
+            username: username,
         }, {
-            _id: userName,
+            username: username,
             hash: hash,
             salt: salt,
         }, {
@@ -49,19 +48,19 @@ router.post('/signup/', function(req, res) {
     });
 });
 
-// curl -X POST http://localhost:3000/api/user/signin -H "Content-Type: application/json" -c cookie.txt -d '{"userName":"bekzod", "password":"123"}'
+// curl -X POST http://localhost:3000/api/user/signin -H "Content-Type: application/json" -c cookie.txt -d '{"username":"bekzod", "password":"123"}'
 router.post('/signin/', function(req, res) {
     let errors = validator.assertValid(userSchema, req.body);
     if (errors.length > 0) {
-        return res.status(500).json({'error': errors});
+        return res.status(400).json({'error': errors});
     }
 
-    let userName = req.body.userName;
+    let username = req.body.username;
     let password = req.body.password;
 
     // retrieve user from the database
     db.users.findOne({
-        _id: userName,
+        username: username,
     }, function(err, user) {
         if (err) {
             return res.status(500).json({'error': err});
@@ -75,7 +74,7 @@ router.post('/signin/', function(req, res) {
 
         let token = utility.createJWTToken({'user': user});
 
-        return res.json({'name': user._id, 'token': token});
+        return res.json({'name': user.username, 'token': token});
     });
 });
 

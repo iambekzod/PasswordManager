@@ -10,14 +10,14 @@ const jwt = require('jsonwebtoken');
  * @return {Promise} Resolve the token is authenticated
  */
 function isAuthenticated(req, res, next) {
-    console.log(req);
-    return new Promise(function(resolve, reject) {
-        jwt.verify(req.token, constants.JWT_SECRET, function(err, token) {
-            if (err || !token) {
-                return reject(err);
-            }
-            resolve(token);
-        });
+    let token = req.headers.authorization.split('Token')[1].trim();
+    console.log(JSON.stringify({t: token}));
+    return verifyJWTToken(token).then(function(resolve) {
+        req.user = resolve.data.user;
+        console.log(req.user);
+        next();
+    }).catch(function(err) {
+        return res.status(400).json(err.message);
     });
 }
 
@@ -56,6 +56,21 @@ function createJWTToken(details) {
      });
 
      return token;
+}
+
+/** Verify the jwt token in the request
+ * @param {string} token The jwt token
+ * @return {Promise} Promise that resolves to the verified token
+ */
+function verifyJWTToken(token) {
+    return new Promise(function(resolve, reject) {
+        jwt.verify(token, constants.JWT_SECRET, function(err, token) {
+            if (err || !token) {
+                return reject(err);
+            }
+            resolve(token);
+        });
+    });
 }
 
 module.exports = {

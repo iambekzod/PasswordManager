@@ -5,61 +5,33 @@ const utility = require('../../helpers/utility.js');
 const crypto = require('../../helpers/crypto.js');
 const constants = require('../../helpers/constants.js');
 
+const validator = require('../../helpers/validator.js');
+const passwordSchema = require('../../helpers/schemas/passwordSchema.json');
+const idSchema = require('../../helpers/schemas/idSchema.json');
+
 const router = new express.Router();
 
-let sanitizePostInput = function(req, res, next) {
-    if (!('website' in req.body)) {
-        return res.status(400).json({'error': 'website is missing'});
-    }
-    if (!('username' in req.body)) {
-        return res.status(400).json({'error': 'username is missing'});
-    }
-    if (!('password' in req.body)) {
-        return res.status(400).json({'error': 'password is missing'});
-    }
-    if (!('notes' in req.body)) {
-        return res.status(400).json({'error': 'notes is missing'});
-    }
-
-    req.body.website = validator.escape(req.body.website);
-    req.body.username = validator.escape(req.body.username);
-    req.body.password = validator.escape(req.body.password);
-    req.body.notes = validator.escape(req.body.notes);
-    next();
-};
-
-let sanitizePatchInput = function(req, res, next) {
-    if ('website' in req.body) {
-        req.body.website = validator.escape(req.body.website);
-    }
-    if ('username' in req.body) {
-        req.body.username = validator.escape(req.body.username);
-    }
-    if ('password' in req.body) {
-        req.body.password = validator.escape(req.body.password);
-    }
-    if ('notes' in req.body) {
-        req.body.notes = validator.escape(req.body.notes);
-    }
-
-    next();
-};
-
 let checkId = function(req, res, next) {
-    if (!validator.isAlphanumeric(req.params.id)) {
-        return res.status(400).json({'error': 'id must be alphanumeric'});
+    let errors = validator.assertValid(idSchema, {id: req.params.id});
+    if (errors.length > 0) {
+        return res.status(400).json({'error': errors});
     }
 
     next();
 };
 
+// curl -X GET http://localhost:3000/api/passwords/wiopf6xS2WCQfYo5 -H "Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXIiOnsidXNlcm5hbWUiOiJiZWt6b2QiLCJoYXNoIjoiZVVqY0Y0bEdRUG9aOHBheEFiWjFZNjc4VzdYN3lYalRMdkhLZnJJKzdONWpQcHM3T3lDcnZ2TThxdnM1MVBXMXNZbC8zYmtQS2VuaVI4ejZLQW9nbkE9PSIsInNhbHQiOiJ0U1ZCdVFreVY0T3hkTUd6d0V3TW1RPT0iLCJfaWQiOiJ3aW9wZjZ4UzJXQ1FmWW81IiwiY3JlYXRlZEF0IjoiMjAxOC0wOC0yM1QwMjo1Nzo1MS40ODJaIiwidXBkYXRlZEF0IjoiMjAxOC0wOC0yM1QwMjo1Nzo1MS40ODJaIn19LCJpYXQiOjE1MzQ5OTQ4NTAsImV4cCI6MTUzNTA4MTI1MH0.tbJx_jdNpV8oR8cHG1Hje1RpEwdEt3PvzHVCioMJ7bs" -H "Content-Type: application/json"
 router.get('/:id/', utility.isAuthenticated, checkId, function(req, res) {
+    if (req.user._id !== req.params.id) {
+        return res.status(500).json({'error': 'forbidden'});
+    }
+
     db.passwords.find({
         author: req.params.id,
     }).sort({
         createdAt: -1,
     }).exec(function(err, data) {
-        if (err) return res.status(500).end(err);
+        if (err) return res.status(500).json({'error': err});
 
         let filterIds = data.map(function(items) {
             return new db.Password(items);
@@ -69,8 +41,13 @@ router.get('/:id/', utility.isAuthenticated, checkId, function(req, res) {
     });
 });
 
-// curl -X POST http://localhost:3000/api/passwords/ -b cookie.txt -H "Content-Type: application/json" -d '{"website":"111", "username":"bekzod", "password":"123", "notes":""}'
-router.post('/', utility.isAuthenticated, sanitizePostInput, function(req, res) {
+// curl -X POST http://localhost:3000/api/passwords/ -H "Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXIiOnsidXNlcm5hbWUiOiJiZWt6b2QiLCJoYXNoIjoiZVVqY0Y0bEdRUG9aOHBheEFiWjFZNjc4VzdYN3lYalRMdkhLZnJJKzdONWpQcHM3T3lDcnZ2TThxdnM1MVBXMXNZbC8zYmtQS2VuaVI4ejZLQW9nbkE9PSIsInNhbHQiOiJ0U1ZCdVFreVY0T3hkTUd6d0V3TW1RPT0iLCJfaWQiOiJ3aW9wZjZ4UzJXQ1FmWW81IiwiY3JlYXRlZEF0IjoiMjAxOC0wOC0yM1QwMjo1Nzo1MS40ODJaIiwidXBkYXRlZEF0IjoiMjAxOC0wOC0yM1QwMjo1Nzo1MS40ODJaIn19LCJpYXQiOjE1MzQ5OTQ4NTAsImV4cCI6MTUzNTA4MTI1MH0.tbJx_jdNpV8oR8cHG1Hje1RpEwdEt3PvzHVCioMJ7bs" -H "Content-Type: application/json" -d '{"website":"111", "username":"bekzod", "password":"123", "notes":""}'
+router.post('/', utility.isAuthenticated, function(req, res) {
+    let errors = validator.assertValid(passwordSchema, req.body);
+    if (errors.length > 0) {
+        return res.status(400).json({'error': errors});
+    }
+
     let data = {
         website: req.body.website,
         username: req.body.username,
@@ -80,11 +57,11 @@ router.post('/', utility.isAuthenticated, sanitizePostInput, function(req, res) 
 
     let requestPassword = {
         author: req.user._id,
-        data: crypto.encrypt(JSON.stringify(data), constants.masterKey),
+        data: crypto.encrypt(JSON.stringify(data), constants.MASTER_KEY),
     };
 
     db.passwords.insert(requestPassword, function(err, data) {
-        if (err) return res.status(500).end(err);
+        if (err) return res.status(500).json({'error': err});
 
         return res.json(new db.Password(data));
     });
@@ -92,10 +69,15 @@ router.post('/', utility.isAuthenticated, sanitizePostInput, function(req, res) 
 
 // curl -X DELETE http://localhost:3000/api/passwords/ABDsXI7jWsb7t0hY -b cookie.txt
 router.delete('/:id/', utility.isAuthenticated, checkId, function(req, res) {
+    let errors = validator.assertValid(passwordSchema, req.body);
+    if (errors.length > 0) {
+        return res.status(400).json({'error': errors});
+    }
+
     db.passwords.findOne({
         _id: req.params.id,
     }, function(err, password) {
-        if (err) return res.status(500).end(err);
+        if (err) return res.status(500).json({'error': err});
         if (!password) {
             return res.status(404).json(
                 {'error': 'Password id: ' + req.params.id + ' does not exist.'});
@@ -105,29 +87,29 @@ router.delete('/:id/', utility.isAuthenticated, checkId, function(req, res) {
         db.passwords.remove({
             _id: password._id,
         }, function(err, item) {
-            if (err) return res.status(500).end(err);
+            if (err) return res.status(500).json({'error': err});
 
             return res.json(item);
         });
     });
 });
 
-router.patch('/:id/', utility.isAuthenticated, checkId, sanitizePatchInput, function(req, res) {
+router.patch('/:id/', utility.isAuthenticated, checkId, function(req, res) {
     db.passwords.findOne({
         _id: req.params.id,
     }, function(err, password) {
         if (err) {
-            return res.status(500).end(err);
+            return res.status(500).json({'error': err});
         }
         if (!password) {
             return res.status(404).json({'error':
                 'Password id: ' + req.params.id + ' does not exist.'});
         }
-        if (password.author !== req.user._id) {
+        if (password.author !== req.user.username) {
             return res.status(403).json({'error': 'forbidden'});
         }
 
-        let data = JSON.parse(crypto.decrypt(password.data, constants.masterKey));
+        let data = JSON.parse(crypto.decrypt(password.data, constants.MASTER_KEY));
         if ('website' in req.body) {
             data.website = req.body.website;
         }
@@ -141,11 +123,11 @@ router.patch('/:id/', utility.isAuthenticated, checkId, sanitizePatchInput, func
             data.notes = req.body.notes;
         }
 
-        password.data = crypto.encrypt(JSON.stringify(data), constants.masterKey);
+        password.data = crypto.encrypt(JSON.stringify(data), constants.MASTER_KEY);
         db.passwords.update({
             _id: password._id,
         }, {author: password.author, data: password.data}, function(err, item) {
-            if (err) return res.status(500).end(err);
+            if (err) return res.status(500).json({'error': err});
 
             return res.json(item);
         });

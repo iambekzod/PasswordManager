@@ -17,8 +17,11 @@ function assertValid(schema, input) {
     }
 
     return zSchema.getLastErrors().map(function(data) {
-        console.log(data);
-        return {message: data.message};
+        let msg = data.message;
+        if (data.code === 'PATTERN') {
+            msg = 'Invalid format: ' + data.params[1];
+        }
+        return {message: msg};
     });
 }
 

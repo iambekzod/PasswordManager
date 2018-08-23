@@ -22,7 +22,7 @@ let Password = (function() {
         this._id = data._id;
         this.createdAt = data.createdAt;
         this.updatedAt = data.updatedAt;
-        this.author = data.author;
+        // this.author = data.author;
 
         this.website = decrypted.website;
         this.username = decrypted.username;
