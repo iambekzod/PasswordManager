@@ -14,28 +14,31 @@ console.log(API_URL);
 @Injectable()
 export class ApiService {
 
-  private options;
-
   constructor(
     private http: HttpClient,
     private sessionService: SessionService
   ) {
-    this.options = this.getRequestOptions();
+    //this.options = this.getRequestOptions();
   }
 
-  private getRequestOptions() {
-    return new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .set('authorization', 'Bearer ' + this.sessionService.accessToken);
-  }
+  // private getRequestOptions() {
+  //   return new HttpHeaders()
+  //     .set('Content-Type', 'application/json')
+  //     .set('authorization', 'Bearer ' + this.sessionService.accessToken);
+  // }
 
   public login(user: User) {
-    return this.http.post(API_URL + '/user/signin', user, this.options);
+    return this.http.post(API_URL + '/user/signin', user);
   }
 
    // API: GET /Passwords
   public getAllPasswords() {
-    return this.http.get(API_URL + '/passwords/', this.options);
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.sessionService.accessToken });
+  let options = { headers: headers };
+
+    return this.http.get(API_URL + '/passwords/' + this.sessionService.name, options);
   }
 
   //   // API: GET /Passwords/filter/:id

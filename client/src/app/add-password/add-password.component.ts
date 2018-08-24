@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
+import { ApiService } from '../api/api.service';
+import { AlertService } from '../alert/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-password',
@@ -10,11 +13,15 @@ import { AuthService } from '../auth/auth.service';
 
 export class AddPasswordComponent implements OnInit {
   form: FormGroup;
+  loading = false;
   private formSubmitAttempt: boolean;
 
   constructor(
+    private router: Router,
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private alertService: AlertService,
+    private apiService: ApiService
   ) {}
 
   ngOnInit() {
@@ -34,9 +41,19 @@ export class AddPasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    // if (this.form.valid) {
-    //   this.authService.doSignIn(this.form.value);
-    // }
-    // this.formSubmitAttempt = true;
+    let parent = this;
+
+    if (this.form.valid) {
+      parent.loading = true;
+      
+      this.apiService.getAllPasswords().toPromise().then(function (response:any) {
+        parent.loading = false;
+        parent.router.navigate(['/dashboard']);
+      }).catch(function (response:any) {
+        parent.alertService.error(response.error.error);
+        parent.loading = false;
+      });
+    }
+    this.formSubmitAttempt = true;
   }
 }
