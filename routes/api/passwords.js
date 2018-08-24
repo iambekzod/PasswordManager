@@ -95,6 +95,11 @@ router.delete('/:id/', utility.isAuthenticated, checkId, function(req, res) {
 });
 
 router.patch('/:id/', utility.isAuthenticated, checkId, function(req, res) {
+    let errors = validator.assertValid(passwordSchema, req.body);
+    if (errors.length > 0) {
+        return res.status(400).json({'error': errors});
+    }
+
     db.passwords.findOne({
         _id: req.params.id,
     }, function(err, password) {
@@ -105,7 +110,7 @@ router.patch('/:id/', utility.isAuthenticated, checkId, function(req, res) {
             return res.status(404).json({'error':
                 'Password id: ' + req.params.id + ' does not exist.'});
         }
-        if (password.author !== req.user.username) {
+        if (password.author !== req.user._id) {
             return res.status(403).json({'error': 'forbidden'});
         }
 

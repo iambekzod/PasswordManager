@@ -11,10 +11,10 @@ const jwt = require('jsonwebtoken');
  */
 function isAuthenticated(req, res, next) {
     let token = req.headers.authorization.split('Token')[1].trim();
-    console.log(JSON.stringify({t: token}));
+
     return verifyJWTToken(token).then(function(resolve) {
         req.user = resolve.data.user;
-        console.log(req.user);
+        console.log(resolve);
         next();
     }).catch(function(err) {
         return res.status(400).json(err.message);
@@ -68,6 +68,7 @@ function verifyJWTToken(token) {
             if (err || !token) {
                 return reject(err);
             }
+
             resolve(token);
         });
     });
