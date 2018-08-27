@@ -10,7 +10,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { SessionService } from '../auth/session.service';
 
 const API_URL = environment.API_URL;
-console.log('url:' + API_URL);
+console.log('Url: ' + API_URL);
 
 @Injectable()
 export class ApiService {

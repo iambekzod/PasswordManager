@@ -13,8 +13,6 @@ import { Password } from '../api/_password';
 })
 
 export class AddPasswordComponent implements OnInit {
-  passwords: Password[];
-
   form: FormGroup;
   loading: Boolean;
   private formSubmitAttempt: boolean;
@@ -47,16 +45,16 @@ export class AddPasswordComponent implements OnInit {
     let parent = this;
 
     if (this.form.valid) {
-      parent.loading = true;
+      //parent.loading = true;
       
-      this.apiService.findPasswords().subscribe(response => {
-        parent.loading = false;
-        parent.passwords = response;
-        parent.router.navigate(['/dashboard']);
-      }, response => {
-        parent.alertService.error(response.error.error);
-        parent.loading = false;
-      });
+      // this.apiService.findPasswords().subscribe(response => {
+      //   parent.loading = false;
+      //   parent.passwords = response;
+      //   parent.router.navigate(['/dashboard']);
+      // }, response => {
+      //   parent.alertService.error(response.error.error);
+      //   parent.loading = false;
+      // });
     }
     this.formSubmitAttempt = true;
   }
