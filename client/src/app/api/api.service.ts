@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 
+import { LoginResponse } from '../login/loginResponse';
 import { Password } from './_password';
 import { User } from '../auth/user';
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { SessionService } from '../auth/session.service';
 
 const API_URL = environment.API_URL;
-console.log(API_URL);
+console.log('url:' + API_URL);
 
 @Injectable()
 export class ApiService {
@@ -17,28 +18,26 @@ export class ApiService {
   constructor(
     private http: HttpClient,
     private sessionService: SessionService
-  ) {
-    //this.options = this.getRequestOptions();
+  ) { }
+
+  private getRequestHeaders() {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.sessionService.accessToken });
   }
 
-  // private getRequestOptions() {
-  //   return new HttpHeaders()
-  //     .set('Content-Type', 'application/json')
-  //     .set('authorization', 'Bearer ' + this.sessionService.accessToken);
-  // }
-
-  public login(user: User) {
-    return this.http.post(API_URL + '/user/signin', user);
+  public login(user: User): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(API_URL + '/user/signin', user);
   }
 
    // API: GET /Passwords
-  public getAllPasswords() {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + this.sessionService.accessToken });
-  let options = { headers: headers };
+  public findPasswords(): Observable<Password[]> {
+    let params = new HttpParams().set('id', this.sessionService.name);
 
-    return this.http.get(API_URL + '/passwords/' + this.sessionService.name, options);
+    return this.http.get<Password[]>(API_URL + '/passwords', { 
+      params: params, 
+      headers: this.getRequestHeaders()
+    });
   }
 
   //   // API: GET /Passwords/filter/:id

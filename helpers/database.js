@@ -20,7 +20,7 @@ let Password = (function() {
         let decrypted = JSON.parse(crypto.decrypt(data.data, constants.MASTER_KEY));
 
         this._id = data._id;
-        this.createdAt = data.createdAt;
+        // this.createdAt = data.createdAt;
         this.updatedAt = data.updatedAt;
         // this.author = data.author;
 

@@ -10,11 +10,14 @@ const jwt = require('jsonwebtoken');
  * @return {Promise} Resolve the token is authenticated
  */
 function isAuthenticated(req, res, next) {
-    let token = req.headers.authorization.split('Token')[1].trim();
+    if (req.headers.authorization.indexOf('Bearer') === -1) {
+        return res.status(400).json({error: 'Invalid auth header'});
+    }
+
+    let token = req.headers.authorization.split('Bearer')[1].trim();
 
     return verifyJWTToken(token).then(function(resolve) {
         req.user = resolve.data.user;
-        console.log(resolve);
         next();
     }).catch(function(err) {
         return res.status(400).json(err.message);

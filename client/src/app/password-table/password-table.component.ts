@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import { Password } from '../api/_password';
-import { PasswordDataService } from '../api/password-data.service';
+import { ApiService } from '../api/api.service';
 
 /**
  * @title Table with filtering
@@ -22,7 +22,7 @@ export class PasswordTableComponent {
 
   constructor(
     private router: Router,
-    private passwordDataService: PasswordDataService
+    private apiService: ApiService
   ) {
   }
 
@@ -35,7 +35,7 @@ export class PasswordTableComponent {
   // }
 
   passwords() {
-    return this.passwordDataService.getAllPasswords();
+    return this.apiService.findPasswords();
   }
 
   // filterPasswords(filter) {

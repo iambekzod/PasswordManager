@@ -15,6 +15,9 @@ export class ErrorInterceptor implements HttpInterceptor {
                 // auto logout if 401 response returned from api
                 this.authService.doSignOut();
                 location.reload(true);
+            } else if (err.error == "jwt expired") {
+                this.authService.doSignOut();
+                location.reload(true);
             }
             return throwError(err);
         }))

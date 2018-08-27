@@ -25,10 +25,10 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-      this.form = this.fb.group({
-        username: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-        password: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
-      });
+    this.form = this.fb.group({
+      username: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+    });
   }
 
   isFieldInvalid(field: string) {
@@ -44,11 +44,11 @@ export class LoginComponent implements OnInit {
     if (this.form.valid) {
       parent.loading = true;
       
-      this.apiService.login(this.form.value).toPromise().then(function (response:any) {
+      this.apiService.login(this.form.value).subscribe(response => {
         parent.loading = false;
         parent.authService.doSignIn(response.token, response.name);
         parent.router.navigate(['/dashboard']);
-      }).catch(function (response:any) {
+      }, response => {
         parent.alertService.error(response.error.error);
         parent.loading = false;
       });

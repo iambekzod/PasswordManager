@@ -23,7 +23,6 @@ import { HeaderComponent } from './header/header.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
 import { ApiService } from './api/api.service';
-import { PasswordDataService } from './api/password-data.service';
 import { AlertService } from './alert/alert.service';
 import { AlertComponent } from './alert/alert.component';
 import { ErrorInterceptor } from './auth/errorInterceptor';
@@ -59,7 +58,7 @@ import { SessionService } from './auth/session.service';
     MatIconModule,
     NgbModule.forRoot()
   ],
-  providers: [SessionService, AuthGuard, AuthService, ApiService, PasswordDataService, AlertService,
+  providers: [SessionService, AuthGuard, AuthService, ApiService, AlertService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })

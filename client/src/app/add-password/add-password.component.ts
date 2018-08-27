@@ -4,6 +4,7 @@ import { AuthService } from '../auth/auth.service';
 import { ApiService } from '../api/api.service';
 import { AlertService } from '../alert/alert.service';
 import { Router } from '@angular/router';
+import { Password } from '../api/_password';
 
 @Component({
   selector: 'app-add-password',
@@ -12,8 +13,10 @@ import { Router } from '@angular/router';
 })
 
 export class AddPasswordComponent implements OnInit {
+  passwords: Password[];
+
   form: FormGroup;
-  loading = false;
+  loading: Boolean;
   private formSubmitAttempt: boolean;
 
   constructor(
@@ -46,10 +49,11 @@ export class AddPasswordComponent implements OnInit {
     if (this.form.valid) {
       parent.loading = true;
       
-      this.apiService.getAllPasswords().toPromise().then(function (response:any) {
+      this.apiService.findPasswords().subscribe(response => {
         parent.loading = false;
+        parent.passwords = response;
         parent.router.navigate(['/dashboard']);
-      }).catch(function (response:any) {
+      }, response => {
         parent.alertService.error(response.error.error);
         parent.loading = false;
       });
