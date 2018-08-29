@@ -65,11 +65,6 @@ router.post('/', utility.isAuthenticated, function(req, res) {
 
 // curl -X DELETE http://localhost:3000/api/passwords/ABDsXI7jWsb7t0hY -b cookie.txt
 router.delete('/', utility.isAuthenticated, checkId, function(req, res) {
-    let errors = validator.assertValid(passwordSchema, req.body);
-    if (errors.length > 0) {
-        return res.status(400).json({'message': errors});
-    }
-
     db.passwords.findOne({
         _id: req.query.id,
     }, function(err, password) {

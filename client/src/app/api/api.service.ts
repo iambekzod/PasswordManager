@@ -47,21 +47,23 @@ export class ApiService {
     });
   }
 
-  // // API: PUT /Passwords/:id
-  // public updatePassword(password: Password): Observable<Password> {
-  //   return this.http
-  //     .put(API_URL + '/passwords/' + password.id, Password)
-  //     .map(response => {
-  //       return new Password(response.json());
-  //     })
-  //     .catch(this.handleError);
-  // }
+  // API: PUT /Passwords/:id
+  public updatePassword(id: string, password: Password): Observable<Password> {
+    let params = new HttpParams().set('id', id);
 
-  // // DELETE /Passwords/:id
-  // public deletePasswordById(passId: number): Observable<null> {
-  //   return this.http
-  //     .delete(API_URL + '/Passwords/' + passId)
-  //     .map(response => null)
-  //     .catch(this.handleError);
-  // }
+    return this.http.patch<Password>(API_URL + '/passwords', password, {
+      params: params,
+      headers: this.getRequestHeaders()
+    });
+  }
+
+  // DELETE /Passwords/:id
+  public deletePassword(id: string): Observable<Password> {
+    let params = new HttpParams().set('id', id);
+
+    return this.http.delete<Password>(API_URL + '/passwords', {
+      params: params,
+      headers: this.getRequestHeaders()
+    });
+  }
 }
