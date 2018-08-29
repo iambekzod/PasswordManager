@@ -26,6 +26,10 @@ export class ApiService {
       'Authorization': 'Bearer ' + this.sessionService.loginSessionObj.token });
   }
 
+  public register(user: User): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(API_URL + '/user/signup', user);
+  }
+
   public login(user: User): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(API_URL + '/user/signin', user);
   }

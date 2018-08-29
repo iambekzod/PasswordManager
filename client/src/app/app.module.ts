@@ -31,6 +31,7 @@ import { HomeComponent } from './home/home.component';
 import { SessionService } from './auth/session.service';
 import { DataStorageService } from './edit-password/data-storage.service';
 import { DialogOverviewExampleDialog } from './password-table/confirm-password.component';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { DialogOverviewExampleDialog } from './password-table/confirm-password.c
     HeaderComponent,
     AlertComponent,
     HomeComponent,
-    DialogOverviewExampleDialog
+    DialogOverviewExampleDialog,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

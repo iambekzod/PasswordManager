@@ -7,10 +7,12 @@ import { LoginComponent } from './login/login.component';
 import { AddPasswordComponent } from './add-password/add-password.component';
 import { EditPasswordComponent } from './edit-password/edit-password.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'add', component: AddPasswordComponent, canActivate: [AuthGuard] },
   { path: 'edit', component: EditPasswordComponent, canActivate: [AuthGuard] }

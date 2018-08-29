@@ -9,3 +9,7 @@
 .clickable {
     cursor: pointer;
 }
+
+#header-navbar {
+    margin-bottom: 5%;
+}
