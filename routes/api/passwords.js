@@ -14,7 +14,7 @@ const router = new express.Router();
 let checkId = function(req, res, next) {
     let errors = validator.assertValid(idSchema, {id: req.query.id});
     if (errors.length > 0) {
-        return res.status(400).json({'error': errors});
+        return res.status(400).json({'message': errors});
     }
 
     next();
@@ -27,7 +27,7 @@ router.get('/', utility.isAuthenticated, checkId, function(req, res) {
     }).sort({
         createdAt: -1,
     }).exec(function(err, data) {
-        if (err) return res.status(500).json({'error': err});
+        if (err) return res.status(500).json({'message': err});
 
         let filterIds = data.map(function(items) {
             return new db.Password(items);
@@ -41,7 +41,7 @@ router.get('/', utility.isAuthenticated, checkId, function(req, res) {
 router.post('/', utility.isAuthenticated, function(req, res) {
     let errors = validator.assertValid(passwordSchema, req.body);
     if (errors.length > 0) {
-        return res.status(400).json({'error': errors});
+        return res.status(400).json({'message': errors});
     }
 
     let data = {
@@ -57,7 +57,7 @@ router.post('/', utility.isAuthenticated, function(req, res) {
     };
 
     db.passwords.insert(requestPassword, function(err, data) {
-        if (err) return res.status(500).json({'error': err});
+        if (err) return res.status(500).json({'message': err});
 
         return res.json(new db.Password(data));
     });
@@ -67,23 +67,23 @@ router.post('/', utility.isAuthenticated, function(req, res) {
 router.delete('/', utility.isAuthenticated, checkId, function(req, res) {
     let errors = validator.assertValid(passwordSchema, req.body);
     if (errors.length > 0) {
-        return res.status(400).json({'error': errors});
+        return res.status(400).json({'message': errors});
     }
 
     db.passwords.findOne({
         _id: req.query.id,
     }, function(err, password) {
-        if (err) return res.status(500).json({'error': err});
+        if (err) return res.status(500).json({'message': err});
         if (!password) {
             return res.status(404).json(
-                {'error': 'Password id: ' + req.query.id + ' does not exist.'});
+                {'message': 'Password id: ' + req.query.id + ' does not exist.'});
         }
-        if (password.author !== req.user.username) return res.status(403).json({'error': 'forbidden'});
+        if (password.author !== req.user.username) return res.status(403).json({'message': 'forbidden'});
 
         db.passwords.remove({
             _id: password._id,
         }, function(err, item) {
-            if (err) return res.status(500).json({'error': err});
+            if (err) return res.status(500).json({'message': err});
 
             return res.json(item);
         });
@@ -93,21 +93,21 @@ router.delete('/', utility.isAuthenticated, checkId, function(req, res) {
 router.patch('/', utility.isAuthenticated, checkId, function(req, res) {
     let errors = validator.assertValid(passwordSchema, req.body);
     if (errors.length > 0) {
-        return res.status(400).json({'error': errors});
+        return res.status(400).json({'message': errors});
     }
 
     db.passwords.findOne({
         _id: req.query.id,
     }, function(err, password) {
         if (err) {
-            return res.status(500).json({'error': err});
+            return res.status(500).json({'message': err});
         }
         if (!password) {
-            return res.status(404).json({'error':
+            return res.status(404).json({'message':
                 'Password id: ' + req.query.id + ' does not exist.'});
         }
         if (password.author !== req.user.username) {
-            return res.status(403).json({'error': 'forbidden'});
+            return res.status(403).json({'message': 'forbidden'});
         }
 
         let data = JSON.parse(crypto.decrypt(password.data, constants.MASTER_KEY));
@@ -128,7 +128,7 @@ router.patch('/', utility.isAuthenticated, checkId, function(req, res) {
         db.passwords.update({
             _id: password._id,
         }, {author: password.author, data: password.data}, function(err, item) {
-            if (err) return res.status(500).json({'error': err});
+            if (err) return res.status(500).json({'message': err});
 
             return res.json(item);
         });

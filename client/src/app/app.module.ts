@@ -28,6 +28,7 @@ import { AlertComponent } from './alert/alert.component';
 import { ErrorInterceptor } from './auth/errorInterceptor';
 import { HomeComponent } from './home/home.component';
 import { SessionService } from './auth/session.service';
+import { DataStorageService } from './edit-password/data-storage.service';
 
 
 @NgModule({
@@ -58,7 +59,7 @@ import { SessionService } from './auth/session.service';
     MatIconModule,
     NgbModule.forRoot()
   ],
-  providers: [SessionService, AuthGuard, AuthService, ApiService, AlertService,
+  providers: [SessionService, AuthGuard, AuthService, ApiService, AlertService, DataStorageService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })

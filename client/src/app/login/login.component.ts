@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
         parent.authService.doSignIn(response.token, response.name);
         parent.router.navigate(['/dashboard']);
       }, response => {
-        parent.alertService.error(response.error.error);
+        parent.alertService.error(response.error.message);
         parent.loading = false;
       });
     }

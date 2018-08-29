@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Password } from '../api/_password';
 import { ApiService } from '../api/api.service';
 import { AlertService } from '../alert/alert.service';
+import { DataStorageService } from '../edit-password/data-storage.service';
 
 /**
  * @title Table with filtering
@@ -19,31 +20,28 @@ export class PasswordTableComponent {
   loading: Boolean;
 
   ngOnInit() {
-    this.test();
-  }
-
-  constructor(
-    private router: Router,
-    private apiService: ApiService,
-    private alertService: AlertService
-  ) {}
-
-  test() {
     this.loading = true;
     let parent = this;
 
     this.apiService.findPasswords().subscribe(response => {
       parent.loading = false;
       parent.dataSource.data = response;
-      console.log(parent.dataSource.data);
     }, response => {
-      parent.alertService.error(response.error.error);
+      parent.alertService.error(response.error.message);
       parent.loading = false;
     });
   }
 
-  editPassword(id: string) {
-    this.router.navigate(['/edit', id])
+  constructor(
+    private router: Router,
+    private apiService: ApiService,
+    private alertService: AlertService,
+    private dataService: DataStorageService
+  ) {}
+
+  editPassword(obj: Password) {
+    this.dataService.formData = obj;
+    this.router.navigate(['/edit']);
   }
 
   deletePassword(id: string) {

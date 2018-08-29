@@ -4,7 +4,6 @@ import { AuthService } from '../auth/auth.service';
 import { ApiService } from '../api/api.service';
 import { AlertService } from '../alert/alert.service';
 import { Router } from '@angular/router';
-import { Password } from '../api/_password';
 
 @Component({
   selector: 'app-add-password',
@@ -13,8 +12,8 @@ import { Password } from '../api/_password';
 })
 
 export class AddPasswordComponent implements OnInit {
-  form: FormGroup;
-  loading: Boolean;
+  addForm: FormGroup;
+  loading: boolean;
   private formSubmitAttempt: boolean;
 
   constructor(
@@ -26,7 +25,7 @@ export class AddPasswordComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-      this.form = this.fb.group({
+      this.addForm = this.fb.group({
         website: ['', Validators.required],
         username: ['', Validators.required],
         password: ['', Validators.required],
@@ -36,25 +35,24 @@ export class AddPasswordComponent implements OnInit {
 
   isFieldInvalid(field: string) {
     return (
-      (!this.form.get(field).valid && this.form.get(field).touched) ||
-      (this.form.get(field).untouched && this.formSubmitAttempt)
+      (!this.addForm.get(field).valid && this.addForm.get(field).touched) ||
+      (this.addForm.get(field).untouched && this.formSubmitAttempt)
     );
   }
 
   onSubmit() {
     let parent = this;
 
-    if (this.form.valid) {
-      //parent.loading = true;
+    if (this.addForm.valid) {
+      this.loading = true;
       
-      // this.apiService.findPasswords().subscribe(response => {
-      //   parent.loading = false;
-      //   parent.passwords = response;
-      //   parent.router.navigate(['/dashboard']);
-      // }, response => {
-      //   parent.alertService.error(response.error.error);
-      //   parent.loading = false;
-      // });
+      this.apiService.createPassword(this.addForm.value).subscribe(response => {
+        parent.loading = false;
+        parent.router.navigate(['/dashboard']);
+      }, response => {
+        parent.alertService.error(response.error.message);
+        parent.loading = false;
+      });
     }
     this.formSubmitAttempt = true;
   }

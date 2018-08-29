@@ -1,5 +1,5 @@
 export interface Password {
-    id: string;
+    _id: string;
     website: string;
     username: string;
     password: string;

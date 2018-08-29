@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core';
+import { LoginResponse } from '../login/loginResponse';
 
 @Injectable()
 export class SessionService {
 
-  get accessToken(): string { 
-    return window.localStorage.getItem('token');
-  };
-
-  set accessToken(token: string) {
-    window.localStorage.setItem('token', token);
-  };
-
-
-  get name(): string { 
-    return window.localStorage.getItem('name');
-  };
-
-  set name(name) { 
-    window.localStorage.setItem('name', name);
-  };
-
   constructor() { }
 
+  get loginSessionObj(): LoginResponse {
+    try {
+      return JSON.parse(this.loginSession);
+    } catch (e) {
+      this.destroy();
+      return null;
+    }
+  }
+
+  get loginSession(): string {
+    return window.localStorage.getItem('loginSession');
+  }
+
+  set loginSession(loginResponse: string) {
+    window.localStorage.setItem('loginSession', loginResponse);
+  }
+
   public destroy(): void {
-    window.localStorage.removeItem('token');
-    window.localStorage.removeItem('name');
+    window.localStorage.removeItem('loginSession');
   }
 }

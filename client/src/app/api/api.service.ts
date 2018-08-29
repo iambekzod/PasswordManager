@@ -23,7 +23,7 @@ export class ApiService {
   private getRequestHeaders() {
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + this.sessionService.accessToken });
+      'Authorization': 'Bearer ' + this.sessionService.loginSessionObj.token });
   }
 
   public login(user: User): Observable<LoginResponse> {
@@ -32,7 +32,7 @@ export class ApiService {
 
    // API: GET /Passwords
   public findPasswords(): Observable<Password[]> {
-    let params = new HttpParams().set('id', this.sessionService.name);
+    let params = new HttpParams().set('id', this.sessionService.loginSessionObj.name);
 
     return this.http.get<Password[]>(API_URL + '/passwords', { 
       params: params, 
@@ -40,35 +40,12 @@ export class ApiService {
     });
   }
 
-  //   // API: GET /Passwords/filter/:id
-  // public getAllFilterPasswords(filter: string): Observable<Password[]> {
-  //   return this.http
-  //     .get(API_URL + '/passwords/filter/' + filter)
-  //     .map(response => {
-  //       const passwords = response.json();
-  //       return passwords.map((password) => new Password(password));
-  //     })
-  //     .catch(this.handleError);
-  // }
-
-  // public getPasswordById(passId: number): Observable<Password> {
-  //   return this.http
-  //     .get(API_URL + '/passwords/' + passId)
-  //     .map(response => {
-  //       return new Password(response.json());
-  //     })
-  //     .catch(this.handleError);
-  // }
-
-  // // API: POST /Passwords
-  // public createPassword(password: Password): Observable<Password> {
-  //   return this.http
-  //     .post(API_URL + '/passwords', Password)
-  //     .map(response => {
-  //       return new Password(response.json());
-  //     })
-  //     .catch(this.handleError);
-  // }
+  // API: POST /Passwords
+  public createPassword(password: Password): Observable<Password> {
+    return this.http.post<Password>(API_URL + '/passwords', password, { 
+      headers: this.getRequestHeaders()
+    });
+  }
 
   // // API: PUT /Passwords/:id
   // public updatePassword(password: Password): Observable<Password> {

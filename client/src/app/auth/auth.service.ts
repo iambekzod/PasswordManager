@@ -9,7 +9,12 @@ export class AuthService {
   ) {}
 
   public isSignedIn() {
-    return !!this.sessionService.accessToken;
+    let loginObj = this.sessionService.loginSessionObj;
+
+    if (loginObj) {
+      return !!loginObj.token;
+    }
+    return false;
   }
 
   public doSignOut() {
@@ -21,8 +26,10 @@ export class AuthService {
       return;
     }
 
-    this.sessionService.accessToken = accessToken;
-    this.sessionService.name = name;
+    this.sessionService.loginSession = JSON.stringify({
+      token: accessToken,
+      name: name
+    });
   }
 
 }
