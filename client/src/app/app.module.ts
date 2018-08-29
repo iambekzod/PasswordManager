@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import { MatDialogModule } from '@angular/material';
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule, MatFormFieldModule, MatTableModule } from '@angular/material';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -29,6 +30,7 @@ import { ErrorInterceptor } from './auth/errorInterceptor';
 import { HomeComponent } from './home/home.component';
 import { SessionService } from './auth/session.service';
 import { DataStorageService } from './edit-password/data-storage.service';
+import { DialogOverviewExampleDialog } from './password-table/confirm-password.component';
 
 
 @NgModule({
@@ -41,7 +43,8 @@ import { DataStorageService } from './edit-password/data-storage.service';
     LoginComponent,
     HeaderComponent,
     AlertComponent,
-    HomeComponent
+    HomeComponent,
+    DialogOverviewExampleDialog
   ],
   imports: [
     BrowserModule,
@@ -50,6 +53,7 @@ import { DataStorageService } from './edit-password/data-storage.service';
     ReactiveFormsModule,
     HttpClientModule,
     MatTableModule,
+    MatDialogModule,
     MatProgressSpinnerModule,
     MatCardModule,
     MatFormFieldModule,
@@ -59,6 +63,7 @@ import { DataStorageService } from './edit-password/data-storage.service';
     MatIconModule,
     NgbModule.forRoot()
   ],
+  entryComponents: [DialogOverviewExampleDialog],
   providers: [SessionService, AuthGuard, AuthService, ApiService, AlertService, DataStorageService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },],
   bootstrap: [AppComponent]

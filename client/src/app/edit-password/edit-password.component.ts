@@ -14,6 +14,7 @@ export class EditPasswordComponent implements OnInit {
   editForm: FormGroup;
   payload: any;
   loading: boolean;
+  website: string;
   private formSubmitAttempt: boolean;
 
   constructor(
@@ -41,6 +42,8 @@ export class EditPasswordComponent implements OnInit {
       this.router.navigate(['/dashboard']);
       return false;
     }
+
+    this.website = this.dataService.formData.website;
 
     this.editForm.setValue({
       username: this.dataService.formData.username,

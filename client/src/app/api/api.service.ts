@@ -32,10 +32,7 @@ export class ApiService {
 
    // API: GET /Passwords
   public findPasswords(): Observable<Password[]> {
-    let params = new HttpParams().set('id', this.sessionService.loginSessionObj.name);
-
     return this.http.get<Password[]>(API_URL + '/passwords', { 
-      params: params, 
       headers: this.getRequestHeaders()
     });
   }

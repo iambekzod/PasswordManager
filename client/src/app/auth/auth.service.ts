@@ -21,14 +21,13 @@ export class AuthService {
     this.sessionService.destroy();
   }
 
-  public doSignIn(accessToken: string, name: string) {
-    if ((!accessToken) || (!name)) {
+  public doSignIn(accessToken: string) {
+    if ((!accessToken)) {
       return;
     }
 
     this.sessionService.loginSession = JSON.stringify({
       token: accessToken,
-      name: name
     });
   }
 

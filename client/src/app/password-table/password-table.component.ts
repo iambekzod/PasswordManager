@@ -1,10 +1,12 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { Password } from '../api/_password';
 import { ApiService } from '../api/api.service';
 import { AlertService } from '../alert/alert.service';
 import { DataStorageService } from '../edit-password/data-storage.service';
+import { DialogOverviewExampleDialog } from './confirm-password.component';
+import { resolve } from 'q';
 
 /**
  * @title Table with filtering
@@ -17,7 +19,8 @@ import { DataStorageService } from '../edit-password/data-storage.service';
 export class PasswordTableComponent implements OnInit {
   displayedColumns: string[] = ['website', 'username', 'password', 'notes', 'actions'];
   dataSource = new MatTableDataSource<Password>();
-  loading: Boolean;
+  loading: boolean;
+  confirmDelete: boolean;
 
   ngOnInit() {
     this.loading = true;
@@ -36,7 +39,8 @@ export class PasswordTableComponent implements OnInit {
     private router: Router,
     private apiService: ApiService,
     private alertService: AlertService,
-    private dataService: DataStorageService
+    private dataService: DataStorageService,
+    public dialog: MatDialog
   ) {}
 
   editPassword(obj: Password) {
@@ -44,14 +48,26 @@ export class PasswordTableComponent implements OnInit {
     this.router.navigate(['/edit']);
   }
 
-  deletePassword(id: string, index: any) {
-    this.loading = true;
+  deletePassword(id: string, website: string, index: any): void {
     let parent = this;
 
-    this.apiService.deletePassword(id).subscribe(response => {
-      parent.loading = false;
-      parent.dataSource.data.splice(index, 1);
-    }, response => {
+    this.dialog.open(DialogOverviewExampleDialog, {
+      width: '350px',
+      data: {title: website}
+    }).afterClosed().toPromise().then(result => {
+
+      if (result) {
+        parent.loading = true;
+        return parent.apiService.deletePassword(id).toPromise();
+      } else {
+        return resolve(null);
+      }
+    }).then(response => {
+      if (response) {
+        parent.loading = false;
+        parent.dataSource.data.splice(index, 1);
+      }
+    }).catch(response => {
       parent.alertService.error(response.error.message);
       parent.loading = false;
     });

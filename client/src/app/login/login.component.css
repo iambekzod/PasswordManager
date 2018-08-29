@@ -8,6 +8,10 @@ mat-card {
     width: 100%;
 }
 
+#signin-content {
+    margin-top: 8%;
+}
+
 .center {
     margin-top: 35px;
     display: flex;           /* establish flex container */
