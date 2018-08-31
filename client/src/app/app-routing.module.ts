@@ -8,6 +8,7 @@ import { AddPasswordComponent } from './add-password/add-password.component';
 import { EditPasswordComponent } from './edit-password/edit-password.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RegisterComponent } from './register/register.component';
+import { InvalidPathComponent } from './invalid-path/invalid-path.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,7 +16,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'add', component: AddPasswordComponent, canActivate: [AuthGuard] },
-  { path: 'edit', component: EditPasswordComponent, canActivate: [AuthGuard] }
+  { path: 'edit', component: EditPasswordComponent, canActivate: [AuthGuard] },
+  { path: '**', component: InvalidPathComponent }
 ];
 
 @NgModule({

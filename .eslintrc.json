@@ -11,6 +11,7 @@
     "extends": ["eslint:recommended", "google"],
     "rules": {
         "no-console": 0,
-        "max-len": ["error", { "code": 100, "ignoreComments": true }]
+        "max-len": ["error", { "code": 100, "ignoreComments": true }],
+        "quote-props": ["error", "consistent-as-needed"]
     }
 }

@@ -1,10 +1,6 @@
 const express = require('express');
-let router = new express.Router();
+const router = new express.Router();
 
 router.use('/api', require('./api'));
-
-// router.use(function (req, res, next) {
-//     res.status(501).end("Invalid API endpoint: " + req.url);
-// });
 
 module.exports = router;

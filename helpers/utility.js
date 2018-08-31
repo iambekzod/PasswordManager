@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
  */
 function isAuthenticated(req, res, next) {
     if (req.headers.authorization.indexOf('Bearer') === -1) {
-        return res.status(400).json({error: 'Invalid auth header'});
+        return res.status(400).json({message: 'Invalid auth header'});
     }
 
     let token = req.headers.authorization.split('Bearer')[1].trim();

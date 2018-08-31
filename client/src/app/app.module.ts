@@ -32,6 +32,7 @@ import { SessionService } from './auth/session.service';
 import { DataStorageService } from './edit-password/data-storage.service';
 import { DialogOverviewExampleDialog } from './password-table/confirm-password.component';
 import { RegisterComponent } from './register/register.component';
+import { InvalidPathComponent } from './invalid-path/invalid-path.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { RegisterComponent } from './register/register.component';
     AlertComponent,
     HomeComponent,
     DialogOverviewExampleDialog,
-    RegisterComponent
+    RegisterComponent,
+    InvalidPathComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +69,7 @@ import { RegisterComponent } from './register/register.component';
   ],
   entryComponents: [DialogOverviewExampleDialog],
   providers: [SessionService, AuthGuard, AuthService, ApiService, AlertService, DataStorageService,
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },],
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

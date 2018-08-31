@@ -6,11 +6,11 @@ const utility = require('../../helpers/utility.js');
 const validator = require('../../helpers/validator.js');
 const userSchema = require('../../helpers/schemas/userSchema.json');
 
-// curl -X POST http://localhost:3000/api/user/signup -H "Content-Type: application/json" -d '{"username":"bekzod", "password":"123"}'
+// curl -X POST http://localhost:3000/api/user/signup -H "Content-Type: application/json" -d '{"username":"bekzod", "password":"123456"}'
 router.post('/signup/', function(req, res) {
     let errors = validator.assertValid(userSchema, req.body);
     if (errors.length > 0) {
-        return res.status(400).json({'message': errors});
+        return res.status(400).json({message: errors});
     }
 
     let username = req.body.username;
@@ -21,10 +21,10 @@ router.post('/signup/', function(req, res) {
         username: username,
     }, function(err, user) {
         if (err) {
-            return res.status(500).json({'message': err});
+            return res.status(500).json({message: err});
         }
         if (user) {
-            return res.status(409).json({'message': 'Username is taken'});
+            return res.status(409).json({message: 'Username is taken'});
         }
 
         // generate a new salt and hash
@@ -41,18 +41,18 @@ router.post('/signup/', function(req, res) {
         }, {
             upsert: true,
         }, function(err) {
-            if (err) return res.status(500).json({'message': err});
+            if (err) return res.status(500).json({message: err});
 
-            return res.json({'status': 'ok'});
+            return res.json({status: 'ok'});
         });
     });
 });
 
-// curl -X POST http://localhost:3000/api/user/signin -H "Content-Type: application/json" -c cookie.txt -d '{"username":"bekzod", "password":"123"}'
+// curl -X POST http://localhost:3000/api/user/signin -H "Content-Type: application/json" -c cookie.txt -d '{"username":"bekzod", "password":"123456"}'
 router.post('/signin/', function(req, res) {
     let errors = validator.assertValid(userSchema, req.body);
     if (errors.length > 0) {
-        return res.status(400).json({'message': errors});
+        return res.status(400).json({message: errors});
     }
 
     let username = req.body.username;
@@ -63,18 +63,18 @@ router.post('/signin/', function(req, res) {
         username: username,
     }, function(err, user) {
         if (err) {
-            return res.status(500).json({'message': err});
+            return res.status(500).json({message: err});
         }
         if (!user) {
-            return res.status(403).json({'message': 'Invalid username or password'});
+            return res.status(403).json({message: 'Invalid username or password'});
         }
         if (user.hash !== utility.generateHash(password, user.salt)) {
-            return res.status(403).json({'message': 'Invalid username or password'});
+            return res.status(403).json({message: 'Invalid username or password'});
         }
 
-        let token = utility.createJWTToken({'user': user});
+        let token = utility.createJWTToken({user: user});
 
-        return res.json({'token': token});
+        return res.json({token: token});
     });
 });
 
