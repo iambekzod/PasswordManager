@@ -46,8 +46,9 @@ export class LoginComponent implements OnInit {
       
       this.apiService.login(this.form.value).subscribe(response => {
         parent.loading = false;
-        parent.authService.doSignIn(response.token);
-        parent.router.navigate(['/dashboard']);
+        if (parent.authService.doSignIn(response)) {
+          parent.router.navigate(['/dashboard']);
+        }
       }, response => {
         parent.alertService.error(response.error.message);
         parent.loading = false;

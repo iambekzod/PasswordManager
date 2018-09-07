@@ -34,21 +34,21 @@ export class ApiService {
     return this.http.post<LoginResponse>(API_URL + '/user/signin', user);
   }
 
-   // API: GET /Passwords
   public findPasswords(): Observable<Password[]> {
-    return this.http.get<Password[]>(API_URL + '/passwords', { 
+    let params = new HttpParams().set('id', this.sessionService.loginSessionObj.id);
+
+    return this.http.get<Password[]>(API_URL + '/passwords', {
+      params: params,
       headers: this.getRequestHeaders()
     });
   }
 
-  // API: POST /Passwords
   public createPassword(password: Password): Observable<Password> {
     return this.http.post<Password>(API_URL + '/passwords', password, { 
       headers: this.getRequestHeaders()
     });
   }
 
-  // API: PUT /Passwords/:id
   public updatePassword(id: string, password: Password): Observable<Password> {
     let params = new HttpParams().set('id', id);
 
@@ -58,7 +58,6 @@ export class ApiService {
     });
   }
 
-  // DELETE /Passwords/:id
   public deletePassword(id: string): Observable<Password> {
     let params = new HttpParams().set('id', id);
 

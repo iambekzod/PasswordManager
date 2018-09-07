@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SessionService } from './session.service';
+import { LoginResponse } from '../login/loginResponse';
 
 @Injectable()
 export class AuthService {
@@ -21,14 +22,13 @@ export class AuthService {
     this.sessionService.destroy();
   }
 
-  public doSignIn(accessToken: string) {
-    if ((!accessToken)) {
-      return;
+  public doSignIn(responseObj: LoginResponse): boolean {
+    if ((!responseObj.token)) {
+      return false;
     }
 
-    this.sessionService.loginSession = JSON.stringify({
-      token: accessToken,
-    });
+    this.sessionService.loginSession = JSON.stringify(responseObj);
+    return true;
   }
 
 }

@@ -20,7 +20,7 @@ function isAuthenticated(req, res, next) {
         req.user = resolve.data.user;
         next();
     }).catch(function(err) {
-        return res.status(400).json(err.message);
+        return res.status(400).json({message: err.message});
     });
 }
 

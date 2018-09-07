@@ -73,8 +73,7 @@ router.post('/signin/', function(req, res) {
         }
 
         let token = utility.createJWTToken({user: user});
-
-        return res.json({token: token});
+        return res.json({id: user._id, token: token});
     });
 });
 

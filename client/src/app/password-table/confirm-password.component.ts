@@ -7,6 +7,7 @@ export interface DialogData {
 
 @Component({
     selector: 'dialog-overview-example-dialog',
+    styleUrls: ['confirm-password.component.css'],
     templateUrl: 'confirm-password.component.html',
   })
   export class DialogOverviewExampleDialog {

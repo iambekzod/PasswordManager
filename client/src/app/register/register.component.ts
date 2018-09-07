@@ -44,8 +44,7 @@ export class RegisterComponent implements OnInit {
       
       this.apiService.register(this.form.value).subscribe(response => {
         parent.loading = false;
-        parent.authService.doSignIn(response.token);
-        parent.router.navigate(['/dashboard']);
+        parent.router.navigate(['/login']);
       }, response => {
         parent.alertService.error(response.error.message);
         parent.loading = false;
