@@ -15,7 +15,7 @@ const app = express();
 // Middleware
 // /////////////////////////////////////////////////////
 if (app.get('env') == 'production') {
-    console.log('Production settings');
+    console.log('Launched with production settings');
     app.use(morgan('combined', {
         skip: function(req, res) {
             return res.statusCode < 400;
@@ -39,5 +39,5 @@ app.use(bodyParser.json());
 app.use(require('./routes'));
 
 app.listen(PORT, () => {
-    console.log('HTTP server on http://localhost:%s', PORT);
+    console.log('Created HTTP server on http://localhost:%s', PORT);
 });
