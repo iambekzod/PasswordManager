@@ -15,6 +15,7 @@ I needed a way for my passwords to be accessible on both my mac and my windows c
 
 ## To Launch
 - run `npm install`
+- inside `client` folder, run `npm install`
 - inside `client` folder, run `ng build --prod --build-optimizer` to build webpack server into a single bundled app located at `/client/dist`
 - run `npm start` for production settings or `node app.js` for development settings
 - Visit `http://localhost:3000/`
