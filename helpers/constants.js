@@ -16,6 +16,10 @@ fs.readdir(PATH, function(err, filenames) {
   let promises = [];
 
   for (let filename of filenames) {
+    if (!filename.endsWith('.json')) {
+      continue;
+    }
+
     let promise = new Promise(function(resolve, reject) {
       fs.readFile(PATH + filename, 'utf-8', function(err, content) {
         if (err) {
