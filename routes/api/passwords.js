@@ -20,7 +20,7 @@ let checkId = function(req, res, next) {
     next();
 };
 
-// curl -X GET http://localhost:3000/api/passwords/wiopf6xS2WCQfYo5 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXIiOnsidXNlcm5hbWUiOiJiZWt6b2QiLCJoYXNoIjoiZVVqY0Y0bEdRUG9aOHBheEFiWjFZNjc4VzdYN3lYalRMdkhLZnJJKzdONWpQcHM3T3lDcnZ2TThxdnM1MVBXMXNZbC8zYmtQS2VuaVI4ejZLQW9nbkE9PSIsInNhbHQiOiJ0U1ZCdVFreVY0T3hkTUd6d0V3TW1RPT0iLCJfaWQiOiJ3aW9wZjZ4UzJXQ1FmWW81IiwiY3JlYXRlZEF0IjoiMjAxOC0wOC0yM1QwMjo1Nzo1MS40ODJaIiwidXBkYXRlZEF0IjoiMjAxOC0wOC0yM1QwMjo1Nzo1MS40ODJaIn19LCJpYXQiOjE1MzQ5OTQ4NTAsImV4cCI6MTUzNTA4MTI1MH0.tbJx_jdNpV8oR8cHG1Hje1RpEwdEt3PvzHVCioMJ7bs" -H "Content-Type: application/json"
+// curl -X GET http://localhost:3000/api/passwords?id=wiopf6xS2WCQfYo5 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXIiOnsidXNlcm5hbWUiOiJiZWt6b2QiLCJoYXNoIjoiZVVqY0Y0bEdRUG9aOHBheEFiWjFZNjc4VzdYN3lYalRMdkhLZnJJKzdONWpQcHM3T3lDcnZ2TThxdnM1MVBXMXNZbC8zYmtQS2VuaVI4ejZLQW9nbkE9PSIsInNhbHQiOiJ0U1ZCdVFreVY0T3hkTUd6d0V3TW1RPT0iLCJfaWQiOiJ3aW9wZjZ4UzJXQ1FmWW81IiwiY3JlYXRlZEF0IjoiMjAxOC0wOC0yM1QwMjo1Nzo1MS40ODJaIiwidXBkYXRlZEF0IjoiMjAxOC0wOC0yM1QwMjo1Nzo1MS40ODJaIn19LCJpYXQiOjE1Mzg4NjE3OTEsImV4cCI6MTUzODk0ODE5MX0.JX2M00ia91uM1tkfXIqF7sW30TUF04DsI4INL9Bydf4" -H "Content-Type: application/json"
 router.get('/', utility.isAuthenticated, checkId, function(req, res) {
     if (req.user._id !== req.query.id) {
         return res.status(400).json({message: 'Invalid user id'});
