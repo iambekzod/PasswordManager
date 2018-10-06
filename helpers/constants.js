@@ -44,7 +44,7 @@ fs.readdir(PATH, function(err, filenames) {
   }
 
   Promise.all(promises).then(function() {
-    if (process.env.NODE_ENV == 'production') {
+    if (process.env.NODE_ENV == 'development') {
       console.log('Constants: ' + JSON.stringify(constants, null, 2));
     }
     // New Keys can be generated for encryption
