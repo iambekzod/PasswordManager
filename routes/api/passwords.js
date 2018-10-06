@@ -112,9 +112,10 @@ router.patch('/', utility.isAuthenticated, checkId, function(req, res) {
         }
 
         let data = JSON.parse(crypto.decrypt(password.data, constants.ENCRYPT_KEY));
-        if ('website' in req.body) {
-            data.website = req.body.website;
+        if (data.website !== req.body.website) {
+            return res.status(403).json({message: 'forbidden'});
         }
+
         if ('username' in req.body) {
             data.username = req.body.username;
         }
