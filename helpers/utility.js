@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const constants = require('./constants.js');
+const constants = require('./constants');
 const jwt = require('jsonwebtoken');
 
 /**

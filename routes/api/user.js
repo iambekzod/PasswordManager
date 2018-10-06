@@ -1,9 +1,9 @@
 const express = require('express');
 const router = new express.Router();
 
-const db = require('../../helpers/database.js');
-const utility = require('../../helpers/utility.js');
-const validator = require('../../helpers/validator.js');
+const db = require('../../helpers/database');
+const utility = require('../../helpers/utility');
+const validator = require('../../helpers/validator');
 const userSchema = require('../../helpers/schemas/userSchema.json');
 
 // curl -X POST http://localhost:3000/api/user/signup -H "Content-Type: application/json" -d '{"username":"bekzod", "password":"123456"}'

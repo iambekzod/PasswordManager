@@ -14,6 +14,7 @@ const app = express();
 // /////////////////////////////////////////////////////
 // Middleware
 // /////////////////////////////////////////////////////
+process.env.NODE_ENV = app.get('env');
 if (app.get('env') == 'production') {
     console.log('Launched with production settings');
     app.use(morgan('combined', {

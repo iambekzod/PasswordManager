@@ -1,7 +1,7 @@
 const Datastore = require('nedb');
 const path = require('path');
-const crypto = require('./crypto.js');
-const constants = require('./constants.js');
+const crypto = require('./crypto');
+const constants = require('./constants');
 
 let users = new Datastore({
     filename: path.join(__dirname, '../db', 'users.db'),

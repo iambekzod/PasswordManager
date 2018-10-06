@@ -1,10 +1,12 @@
 const fs = require('fs');
+const crypto = require('crypto');
+
 const PATH = 'helpers/constants/';
 
-  // Properties:
-  //   ENCRYPT_KEY,
-  //   JWT_SECRET,
-  //   MAX_AGE
+// Properties:
+//   ENCRYPT_KEY,
+//   JWT_SECRET,
+//   MAX_AGE
 let constants = {};
 
 fs.readdir(PATH, function(err, filenames) {
@@ -42,7 +44,18 @@ fs.readdir(PATH, function(err, filenames) {
   }
 
   Promise.all(promises).then(function() {
-    console.log('Constants: ' + JSON.stringify(constants, null, 2));
+    if (process.env.NODE_ENV == 'production') {
+      console.log('Constants: ' + JSON.stringify(constants, null, 2));
+    }
+    // New Keys can be generated for encryption
+    if (constants.SETUP_NEW_KEY) {
+      let keys = {
+        KEY_1: crypto.randomBytes(32).toString('base64'),
+        KEY_2: crypto.randomBytes(32).toString('base64'),
+      };
+
+      console.log('SETUP_NEW_KEY: ' + JSON.stringify(keys, null, 2));
+    }
   });
 });
 

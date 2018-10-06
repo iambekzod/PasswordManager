@@ -1,11 +1,11 @@
 const express = require('express');
 
-const db = require('../../helpers/database.js');
-const utility = require('../../helpers/utility.js');
-const crypto = require('../../helpers/crypto.js');
-const constants = require('../../helpers/constants.js');
+const db = require('../../helpers/database');
+const utility = require('../../helpers/utility');
+const crypto = require('../../helpers/crypto');
+const constants = require('../../helpers/constants');
 
-const validator = require('../../helpers/validator.js');
+const validator = require('../../helpers/validator');
 const passwordSchema = require('../../helpers/schemas/passwordSchema.json');
 const idSchema = require('../../helpers/schemas/idSchema.json');
 
