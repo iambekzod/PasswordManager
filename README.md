@@ -52,5 +52,5 @@ Contents for `jwt-secret-nogit.json`,
     }
 
 ## Credits
-AES Crypto from `https://gist.github.com/AndiDittrich/4629e7db04819244e843`
+AES Crypto from `https://gist.github.com/AndiDittrich/4629e7db04819244e843`\
 Angular6 Tutorial with API service `https://www.sitepoint.com/angular-rxjs-create-api-service-rest-backend/`
