@@ -21,7 +21,8 @@ I needed a way for my passwords to be accessible on both my mac and my windows c
 - NOTE: logging rules, and the api endpoint url are the only environment difference 
 
 ## Setup Secret Constants
-Inside `helpers/constants/settings.json`, set `SETUP_NEW_KEY` to `true`
+Inside `helpers/constants/settings.json`,
+- set `SETUP_NEW_KEY: true`
 
 After launching, something similar shows up
 
@@ -30,7 +31,7 @@ After launching, something similar shows up
         "KEY_2": "XYZ"
     }
 
-Set `KEY_1`, `KEY_2` renamed to be `ENCRYPT_KEY`, `JWT_SECRET` in a new file as, i.e. 
+Set `KEY_1`, `KEY_2` and rename to be `ENCRYPT_KEY`, `JWT_SECRET` in a new file as:
 - `helpers/constants/encrypt-key-nogit.json` 
 - `helpers/constants/jwt-secret-nogit.json`
 - MAX_AGE for expiry can be "24 hours", "7 days", "2000" (in ms)
