@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
+
 import { MatDialogModule } from '@angular/material';
 import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule, MatFormFieldModule, MatTableModule } from '@angular/material';
+import { MatInputModule, MatFormFieldModule, MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,7 +22,8 @@ import { EditPasswordComponent } from './edit-password/edit-password.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
-import { AuthGuard } from './auth/auth.guard';
+import { AuthGuard } from './auth/guard/auth.guard';
+import { RoleGuard } from './auth/guard/role.guard';
 import { AuthService } from './auth/auth.service';
 import { ApiService } from './api/api.service';
 import { AlertService } from './alert/alert.service';
@@ -59,6 +61,8 @@ import { InvalidPathComponent } from './invalid-path/invalid-path.component';
     MatTableModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatPaginatorModule,
+    MatSortModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -68,7 +72,7 @@ import { InvalidPathComponent } from './invalid-path/invalid-path.component';
     NgbModule.forRoot()
   ],
   entryComponents: [DialogOverviewExampleDialog],
-  providers: [SessionService, AuthGuard, AuthService, ApiService, AlertService, DataStorageService,
+  providers: [SessionService, RoleGuard, AuthGuard, AuthService, ApiService, AlertService, DataStorageService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
