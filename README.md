@@ -41,7 +41,7 @@ Set `KEY_1`, `KEY_2` and rename to be `ENCRYPT_KEY`, `JWT_SECRET` in a new file 
 Contents for `encrypt-key-nogit.json`
 
     {
-        "ENCRYPT_KEY": "ABC",
+        "ENCRYPT_KEY": "ABC"
     }
 
 Contents for `jwt-secret-nogit.json`, 
