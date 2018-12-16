@@ -28,7 +28,7 @@ router.get('/', utility.isAuthenticated, checkId, function(req, res) {
 
     db.passwords.find({
         author: req.user.username,
-    }).sort({
+    }).limit(200).sort({
         createdAt: -1,
     }).exec(function(err, data) {
         if (err) return res.status(500).json({message: err});
