@@ -78,8 +78,8 @@ function verifyJWTToken(token) {
 }
 
 module.exports = {
-    isAuthenticated,
-    generateHash,
-    generateSalt,
-    createJWTToken,
+    isAuthenticated: isAuthenticated,
+    generateHash: generateHash,
+    generateSalt: generateSalt,
+    createJWTToken: createJWTToken,
 };

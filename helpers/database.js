@@ -20,9 +20,7 @@ let Password = (function() {
         let decrypted = JSON.parse(crypto.decrypt(data.data, constants.ENCRYPT_KEY));
 
         this._id = data._id;
-        // this.createdAt = data.createdAt;
         this.updatedAt = data.updatedAt;
-        // this.author = data.author;
 
         this.website = decrypted.website;
         this.username = decrypted.username;
@@ -32,7 +30,7 @@ let Password = (function() {
 }());
 
 let User = (function() {
-    return function comment(data) {
+    return function user(data) {
         this._id = data._id;
         this.hash = data.hash;
         this.salt = data.salt;

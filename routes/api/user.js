@@ -71,6 +71,8 @@ router.post('/signin/', function(req, res) {
         if (user.hash !== utility.generateHash(password, user.salt)) {
             return res.status(403).json({message: 'Invalid username or password'});
         }
+        delete user.hash;
+        delete user.salt;
 
         let token = utility.createJWTToken({user: user});
         return res.json({id: user._id, token: token});
