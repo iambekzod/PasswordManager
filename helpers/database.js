@@ -21,7 +21,6 @@ let Password = (function() {
 
         this._id = data._id;
         this.updatedAt = data.updatedAt;
-
         this.website = decrypted.website;
         this.username = decrypted.username;
         this.password = decrypted.password;
