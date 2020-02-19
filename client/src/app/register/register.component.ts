@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
 import { AlertService } from '../alert/alert.service';
 import { ApiService } from '../api/api.service';
 
@@ -18,15 +17,22 @@ export class RegisterComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private authService: AuthService,
     private alertService: AlertService,
     private apiService: ApiService) { }
 
   ngOnInit() {
     this.form = this.fb.group({
       username: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      confirm_password: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     });
+  }
+
+  checkPasswords(fb: FormGroup) { // here we have the 'passwords' group
+    let pass = fb.controls.password.value;
+    let confirmPass = fb.controls.confirm_password.value;
+
+    return pass === confirmPass ? null : { notSame: true }     
   }
 
   isFieldInvalid(field: string) {
@@ -42,7 +48,7 @@ export class RegisterComponent implements OnInit {
     if (this.form.valid) {
       parent.loading = true;
       
-      this.apiService.register(this.form.value).subscribe(response => {
+      this.apiService.register(this.form.value).subscribe(() => {
         parent.loading = false;
         parent.router.navigate(['/login']);
       }, response => {

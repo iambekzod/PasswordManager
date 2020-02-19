@@ -15,6 +15,12 @@
               Please inform your password
             </mat-error>
           </mat-form-field>
+          <mat-form-field class="full-width-input">
+            <input matInput type="password" placeholder="Confirm Password" formControlName="password" required>
+            <mat-error *ngIf="isFieldInvalid('confirm_password')">
+              Please inform your password
+            </mat-error>
+          </mat-form-field>
           <button mat-raised-button color="primary">Register</button>
         </form>
   
